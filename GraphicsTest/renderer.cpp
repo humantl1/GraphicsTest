@@ -57,13 +57,13 @@ internal void draw_line(int x0, int y0, int x1, int y1, u32 color)
 		
 		if (x0 == x1 && y0 == y1) break; // if current point is the endpoint, exit
 
-		int e2 = 2 * err;
-		if (e2 >= dy) // e_xy + e_x > 0
+		int e2 = 2 * err; // magic part of algorithm (to me)
+		if (e2 >= dy) // e_xy + e_x > 0 : evaluates if x should be advanced
 		{
 			err += dy;
 			x0 += sx;
 		}
-		if (e2 <= dx) // e_xy + e_y < 0
+		if (e2 <= dx) // e_xy + e_y < 0 : evaluates if you should be advanced
 		{
 			err += dx;
 			y0 += sy;

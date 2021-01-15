@@ -16,6 +16,7 @@ struct Render_State // data for current state of buffer
 global_variable Render_State render_state;
 
 #include "renderer.cpp" // this inclusion of another .cpp is "Unity" style compiling
+#include "graphics.cpp"
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -118,10 +119,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 		}
 
 		// Simulate
-		clear_screen(0xff5500);
-		//draw_rect(0, 0, 1, 1, 0x00ff22);
-		//draw_point(10, 10, 0x00ff22);
-		draw_line(0, 0, 700, 50, 0x00ff22);
+		draw_graphics();
 
 		// Render
 		StretchDIBits(hdc, // handle to a device context. references that windows uses to draw to 
