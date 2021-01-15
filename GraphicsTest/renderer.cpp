@@ -40,10 +40,14 @@ internal void draw_point(float x, float y, u32 color)
 	draw_point_in_pixels(x, y, color);
 }
 
-
 // Variation of Bresenham's line algorithm from Wikipedia
-internal void draw_line(int x0, int y0, int x1, int y1, u32 color)
+internal void draw_line_in_pixels(int x0, int y0, int x1, int y1, u32 color)
 {
+	x0 = clamp(0, x0, render_state.width);
+	y0 = clamp(0, y0, render_state.height);
+	x1 = clamp(0, x1, render_state.width);
+	y1 = clamp(0, y1, render_state.height);
+
 	int dx = abs(x1 - x0); // change in x
 	int sx = x0 < x1 ? 1 : -1; // slope of x
 	int dy = -abs(y1 - y0); // change in y (negated to calculate difference between dx and dy)
@@ -71,8 +75,15 @@ internal void draw_line(int x0, int y0, int x1, int y1, u32 color)
 	}
 }
 
+internal void draw_line(int x0, int y0, float magnitude, float direction, u32 color)
+{
+	
+}
+
 /// <summary>
 /// draws filled rectangle to window
+/// starting at bottom left of window
+/// units are in absolute pixels
 /// </summary>
 /// <param name="x0"> lower left x </param>
 /// <param name="y0"> lower left y </param>
@@ -96,22 +107,19 @@ internal void draw_rect_in_pixels(int x0, int y0, int x1, int y1, u32 color)
 	}
 }
 
-internal void draw_rect(float x, float y, float half_size_x, float half_size_y, u32 color)
+// draw rect starting at bottom left of winow, units are percentage of screen height
+internal void draw_rect(float x, float y, float length_x, float length_y, u32 color)
 {
 	x *= render_state.height * render_scale;
 	y *= render_state.height * render_scale;
-	half_size_x *= render_state.height * render_scale;
-	half_size_y *= render_state.height * render_scale;
-
-	x += render_state.width / 2.f;
-	y += render_state.height / 2.f;
+	length_x *= render_state.height * render_scale;
+	length_y *= render_state.height * render_scale;
 
 	// change to pixel
-	int x0 = x - half_size_x;
-	int x1 = x + half_size_x;
-	int y0 = y - half_size_y;
-	int y1 = y + half_size_y;
-
+	int x0 = x;
+	int x1 = x + length_x;
+	int y0 = y;
+	int y1 = y + length_y;
 
 	draw_rect_in_pixels(x0, y0, x1, y1, color);
 }
