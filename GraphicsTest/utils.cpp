@@ -11,3 +11,8 @@ inline int clamp(int min, int val, int max)
 	if (val > max) return max;
 	return val;
 }
+
+inline float deg_to_rad(float degrees)
+{
+	return degrees * 3.14159 / 180;
+}

@@ -41,7 +41,7 @@ internal void draw_point(float x, float y, u32 color)
 }
 
 // Variation of Bresenham's line algorithm from Wikipedia
-internal void draw_line_in_pixels(int x0, int y0, int x1, int y1, u32 color)
+internal void draw_line(int x0, int y0, int x1, int y1, u32 color)
 {
 	x0 = clamp(0, x0, render_state.width);
 	y0 = clamp(0, y0, render_state.height);
@@ -75,9 +75,30 @@ internal void draw_line_in_pixels(int x0, int y0, int x1, int y1, u32 color)
 	}
 }
 
-internal void draw_line(int x0, int y0, float magnitude, float direction, u32 color)
+/// <summary>
+/// draw line from start point, length, angle in degrees, and color
+/// </summary>
+/// <param name="x0">x from lower left</param>
+/// <param name="y0">y from lower left</param>
+/// <param name="magnitude">length of line</param>
+/// <param name="degrees">angle of line in degrees, from horizontal right</param>
+/// <param name="color">hex color</param>
+/// <returns></returns>
+internal void draw_line(int x0, int y0, float magnitude, float degrees, u32 color)
 {
-	
+	x0 = clamp(0, x0, render_state.width);
+	y0 = clamp(0, y0, render_state.height);
+
+	float radians = deg_to_rad(degrees);
+	float x1 = cos(radians);
+	x1 *= magnitude;
+	float y1 = sin(radians);
+	y1 *= magnitude;
+
+	x1 = clamp(0, x1, render_state.width);
+	y1 = clamp(0, y1, render_state.height);
+
+	draw_line(x0, y0, (int)x1, (int)y1, color);
 }
 
 /// <summary>
