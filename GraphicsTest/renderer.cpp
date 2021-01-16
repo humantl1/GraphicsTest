@@ -101,7 +101,7 @@ internal void draw_line(int x0, int y0, float magnitude, float degrees, u32 colo
 	draw_line(x0, y0, (int)x1, (int)y1, color);
 }
 
-internal void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
+internal void draw_triangle_outline(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
 {
 	draw_line(x0, y0, x1, y1, color);
 	draw_line(x1, y1, x2, y2, color);
@@ -190,6 +190,73 @@ internal void fill_top_flat_triangle(int x0, int x1, int y0, int x2, int y2, u32
 	v2.y = y2;
 
 	fill_top_flat_triangle(v0, v1, v2, color);
+}
+
+// sort triangle vertices in ascending order, so v0 is the topmost vertice
+internal void sort_triangle_vertices(Vertice* v0, Vertice* v1, Vertice* v2)
+{
+	Vertice* temp = new Vertice;
+
+	if (v0->y < v1->y)
+	{
+		temp->x = v0->x;
+		temp->y = v0->y;
+		v0->x = v1->x;
+		v0->y = v1->y;
+		v1->x = temp->x;
+		v1->y = temp->y;
+	}
+	if (v0->y < v2->y)
+	{
+		temp->x = v0->x;
+		temp->y = v0->y;
+		v0->x = v2->x;
+		v0->y = v2->y;
+		v2->x = temp->x;
+		v2->y = temp->y;
+	}
+	if (v1->y < v2->y)
+	{
+		temp->x = v1->x;
+		temp->y = v1->y;
+		v1->x = v2->x;
+		v1->y = v2->y;
+		v2->x = temp->x;
+		v2->y = temp->y;
+	}
+}
+
+internal void draw_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
+{
+	sort_triangle_vertices(&v0, &v1, &v2); // arrange from greatest y to least y
+	
+	if (v1.y == v2.y) // bottom side is flat
+		fill_bottom_flat_triangle(v0, v1, v2, color);
+	else if (v0.y == v1.y) // top side is flat
+		fill_top_flat_triangle(v0, v1, v2, color);
+	else // general case, split triangles into bottom-flat and top-flat triangles
+	{
+		Vertice v3;
+		// equation for intercepting the longer side at the y value of the shorter side's endpoint:
+		v3.x = (int)(v0.x + ((float)(v1.y - v0.y) / (float)(v2.y - v0.y)) * (v2.x - v0.x));
+		v3.y = v1.y;
+		fill_bottom_flat_triangle(v0, v1, v3, color);
+		fill_top_flat_triangle(v1, v3, v2, color);
+	}
+}
+  
+internal void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
+{
+	Vertice v0, v1, v2;
+
+	v0.x = x0;
+	v0.y = y0;
+	v1.x = x1;
+	v1.y = y1;
+	v2.x = x2;
+	v2.y = y2;
+
+	draw_triangle(v0, v1, v2, color);
 }
 
 /// <summary>
