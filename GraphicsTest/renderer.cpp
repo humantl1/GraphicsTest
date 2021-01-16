@@ -1,4 +1,4 @@
-struct Vector // probably will need this, right?
+struct Vertice
 {
 	int x, y;
 };
@@ -99,6 +99,54 @@ internal void draw_line(int x0, int y0, float magnitude, float degrees, u32 colo
 	y1 = clamp(0, y1, render_state.height);
 
 	draw_line(x0, y0, (int)x1, (int)y1, color);
+}
+
+internal void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
+{
+	draw_line(x0, y0, x1, y1, color);
+	draw_line(x1, y1, x2, y2, color);
+	draw_line(x0, y0, x2, y2, color);
+}
+
+// algorithms from http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
+internal void fill_bottom_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
+{
+	float invslope0 = (float)(v1.x - v0.x) / (v1.y - v0.y); // x/y slope from bottom left to top 
+	float invslope1 = (float)(v2.x - v0.x) / (v2.y - v0.y); // x/y slope from bottom right to top
+
+	float curx0 = v0.x; // start point of line from top to lower left
+	float curx1 = v0.x; // start point of line from top to lower right
+
+	for (int scanlineY = v0.y; scanlineY >= v2.y; scanlineY--) // descend line by line from top of triangle to bottom
+	{
+		draw_line((int)curx0, scanlineY, (int)curx1, scanlineY, color);
+		curx0 += invslope0;
+		curx1 += invslope1;
+	}
+}
+
+/// <summary>
+/// Rasterize a flat-bottomed triangle
+/// </summary>
+/// <param name="x0">x top of triangl</param>
+/// <param name="y0">y top of triangle</param>
+/// <param name="x1">x bottom point of triangle</param>
+/// <param name="x2">x bottom point of triangle</param>
+/// <param name="y1">y bottom of triangle</param>
+/// <param name="color">triangle color</param>
+/// <returns></returns>
+internal void fill_bottom_flat_triangle(int x0, int y0, int x1, int x2, int y1, u32 color)
+{
+	Vertice v0, v1, v2;
+
+	v0.x = x0;
+	v0.y = y0;
+	v1.x = x1;
+	v1.y = y1;
+	v2.x = x2;
+	v2.y = y1;
+
+	fill_bottom_flat_triangle(v0, v1, v2, color);
 }
 
 /// <summary>
