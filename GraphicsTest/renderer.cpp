@@ -121,8 +121,8 @@ internal void fill_bottom_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 
 	for (int scanlineY = v0.y; scanlineY >= v2.y; scanlineY--) // descend line by line from top of triangle to bottom
 	{
 		draw_line((int)curx0, scanlineY, (int)curx1, scanlineY, color);
-		curx0 += invslope0; // expand end point according to ratio of dx over dy
-		curx1 += invslope1;
+		curx0 -= invslope0; // expand end point according to ratio of dx over dy
+		curx1 -= invslope1;
 	}
 }
 
