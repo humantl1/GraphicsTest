@@ -86,17 +86,11 @@ internal void draw_line(int x0, int y0, int x1, int y1, u32 color)
 /// <returns></returns>
 internal void draw_line(int x0, int y0, float magnitude, float degrees, u32 color)
 {
-	x0 = clamp(0, x0, render_state.width);
-	y0 = clamp(0, y0, render_state.height);
-
 	float radians = deg_to_rad(degrees);
 	float x1 = cos(radians);
 	x1 *= magnitude;
 	float y1 = sin(radians);
 	y1 *= magnitude;
-
-	x1 = clamp(0, x1, render_state.width);
-	y1 = clamp(0, y1, render_state.height);
 
 	draw_line(x0, y0, (int)x1, (int)y1, color);
 }
@@ -199,30 +193,21 @@ internal void sort_triangle_vertices(Vertice* v0, Vertice* v1, Vertice* v2)
 
 	if (v0->y < v1->y)
 	{
-		temp->x = v0->x;
-		temp->y = v0->y;
-		v0->x = v1->x;
-		v0->y = v1->y;
-		v1->x = temp->x;
-		v1->y = temp->y;
+		std::swap(*temp, *v0);
+		std::swap(*v0, *v1);
+		std::swap(*v1, *temp);
 	}
 	if (v0->y < v2->y)
 	{
-		temp->x = v0->x;
-		temp->y = v0->y;
-		v0->x = v2->x;
-		v0->y = v2->y;
-		v2->x = temp->x;
-		v2->y = temp->y;
+		std::swap(*temp, *v0);
+		std::swap(*v0, *v2);
+		std::swap(*v2, *temp);
 	}
 	if (v1->y < v2->y)
 	{
-		temp->x = v1->x;
-		temp->y = v1->y;
-		v1->x = v2->x;
-		v1->y = v2->y;
-		v2->x = temp->x;
-		v2->y = temp->y;
+		std::swap(*temp, *v1);
+		std::swap(*v1, *v2);
+		std::swap(*v2, *temp);
 	}
 }
 
