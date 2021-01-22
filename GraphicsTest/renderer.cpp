@@ -7,7 +7,7 @@ struct Vertice
 /// fills window with specified color
 /// </summary>
 /// <param name="color"> color to fill </param>
-internal void clear_screen(u32 color)
+static void clear_screen(u32 color)
 {
 	u32* pixel = (u32*)render_state.memory; // points to first pixel in memory buffer
 	for (int y = 0; y < render_state.height; ++y)
@@ -19,7 +19,7 @@ internal void clear_screen(u32 color)
 	}
 }
 
-internal void draw_point_in_pixels(int x, int y, u32 color)
+static void draw_point_in_pixels(int x, int y, u32 color)
 {
 	x = clamp(0, x, render_state.width);
 	y = clamp(0, y, render_state.height);
@@ -29,7 +29,7 @@ internal void draw_point_in_pixels(int x, int y, u32 color)
 	*pixel = color;
 }
 
-internal void draw_point(float x, float y, u32 color)
+static void draw_point(float x, float y, u32 color)
 {
 	x *= render_state.width * render_scale;
 	y *= render_state.height * render_scale;
@@ -41,7 +41,7 @@ internal void draw_point(float x, float y, u32 color)
 }
 
 // Variation of Bresenham's line algorithm from Wikipedia
-internal void draw_line(int x0, int y0, int x1, int y1, u32 color)
+static void draw_line(int x0, int y0, int x1, int y1, u32 color)
 {
 	x0 = clamp(0, x0, render_state.width);
 	y0 = clamp(0, y0, render_state.height);
@@ -84,7 +84,7 @@ internal void draw_line(int x0, int y0, int x1, int y1, u32 color)
 /// <param name="degrees">angle of line in degrees, from horizontal right</param>
 /// <param name="color">hex color</param>
 /// <returns></returns>
-internal void draw_line(int x0, int y0, float magnitude, float degrees, u32 color)
+static void draw_line(int x0, int y0, float magnitude, float degrees, u32 color)
 {
 	float radians = deg_to_rad(degrees);
 	float x1 = cos(radians);
@@ -95,7 +95,7 @@ internal void draw_line(int x0, int y0, float magnitude, float degrees, u32 colo
 	draw_line(x0, y0, (int)x1, (int)y1, color);
 }
 
-internal void draw_triangle_outline(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
+static void draw_triangle_outline(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
 {
 	draw_line(x0, y0, x1, y1, color);
 	draw_line(x1, y1, x2, y2, color);
@@ -104,7 +104,7 @@ internal void draw_triangle_outline(int x0, int y0, int x1, int y1, int x2, int 
 
 // rasterize a flat-bottom triangle using the "standard algorithm"
 // algorithm from http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
-internal void fill_bottom_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
+static void fill_bottom_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
 {
 	float invslope0 = (float)(v1.x - v0.x) / (v1.y - v0.y); // x/y slope from v1 bottom to top 
 	float invslope1 = (float)(v2.x - v0.x) / (v2.y - v0.y); // x/y slope from v2 bottom to top
@@ -112,7 +112,8 @@ internal void fill_bottom_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 
 	float curx0 = v0.x; // start point of line from top to bottom of v1 side
 	float curx1 = v0.x; // start point of line from top to bottom of v2 side
 
-	for (int scanlineY = v0.y; scanlineY >= v2.y; scanlineY--) // descend line by line from top of triangle to bottom
+	// descend line by line from top of triangle to bottom
+	for (int scanlineY = v0.y; scanlineY >= v2.y; scanlineY--) 
 	{
 		draw_line((int)curx0, scanlineY, (int)curx1, scanlineY, color);
 		curx0 -= invslope0; // expand end point according to ratio of dx over dy
@@ -130,7 +131,7 @@ internal void fill_bottom_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 
 /// <param name="y1">y bottom of triangle</param>
 /// <param name="color">triangle color</param>
 /// <returns></returns>
-internal void fill_bottom_flat_triangle(int x0, int y0, int x1, int x2, int y1, u32 color)
+static void fill_bottom_flat_triangle(int x0, int y0, int x1, int x2, int y1, u32 color)
 {
 	Vertice v0, v1, v2;
 
@@ -146,7 +147,7 @@ internal void fill_bottom_flat_triangle(int x0, int y0, int x1, int x2, int y1, 
 
 // rasterize a flat-top triangle using the "standard algorithm"
 // algorithm from http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
-internal void fill_top_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
+static void fill_top_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
 {
 	float invslope0 = (float)(v2.x - v0.x) / (v2.y - v0.y); // x/y slope from bottom left to top 
 	float invslope1 = (float)(v2.x - v1.x) / (v2.y - v1.y); // x/y slope from bottom right to top
@@ -172,7 +173,7 @@ internal void fill_top_flat_triangle(Vertice v0, Vertice v1, Vertice v2, u32 col
 /// <param name="y2">y top point of triangle</param>
 /// <param name="color">triangle color</param>
 /// <returns></returns>
-internal void fill_top_flat_triangle(int x0, int x1, int y0, int x2, int y2, u32 color)
+static void fill_top_flat_triangle(int x0, int x1, int y0, int x2, int y2, u32 color)
 {
 	Vertice v0, v1, v2;
 
@@ -187,7 +188,7 @@ internal void fill_top_flat_triangle(int x0, int x1, int y0, int x2, int y2, u32
 }
 
 // sort triangle vertices in ascending order, so v0 is the topmost vertice
-internal void sort_triangle_vertices(Vertice* v0, Vertice* v1, Vertice* v2)
+static void sort_triangle_vertices(Vertice* v0, Vertice* v1, Vertice* v2)
 {
 	Vertice* temp = new Vertice;
 
@@ -211,7 +212,7 @@ internal void sort_triangle_vertices(Vertice* v0, Vertice* v1, Vertice* v2)
 	}
 }
 
-internal void draw_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
+static void draw_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
 {
 	sort_triangle_vertices(&v0, &v1, &v2); // arrange from greatest y to least y
 	
@@ -225,12 +226,14 @@ internal void draw_triangle(Vertice v0, Vertice v1, Vertice v2, u32 color)
 		// equation for intercepting the longer side at the y value of the shorter side's endpoint:
 		v3.x = (int)(v0.x + ((float)(v1.y - v0.y) / (float)(v2.y - v0.y)) * (v2.x - v0.x));
 		v3.y = v1.y;
+
 		fill_bottom_flat_triangle(v0, v1, v3, color);
 		fill_top_flat_triangle(v1, v3, v2, color);
 	}
 }
-  
-internal void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
+
+// convert points to vertices and send to draw_triangle function
+static void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, u32 color)
 {
 	Vertice v0, v1, v2;
 
@@ -254,7 +257,7 @@ internal void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, u32 
 /// <param name="x1"> upper right x </param>
 /// <param name="y1"> upper right y</param>
 /// <param name="color"> draw color </param>
-internal void draw_rect_in_pixels(int x0, int y0, int x1, int y1, u32 color)
+static void draw_rect_in_pixels(int x0, int y0, int x1, int y1, u32 color)
 {
 	x0 = clamp(0, x0, render_state.width);
 	y0 = clamp(0, y0, render_state.height);
@@ -272,7 +275,7 @@ internal void draw_rect_in_pixels(int x0, int y0, int x1, int y1, u32 color)
 }
 
 // draw rect starting at bottom left of winow, units are percentage of screen height
-internal void draw_rect(float x, float y, float length_x, float length_y, u32 color)
+static void draw_rect(float x, float y, float length_x, float length_y, u32 color)
 {
 	x *= render_state.height * render_scale;
 	y *= render_state.height * render_scale;

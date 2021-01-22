@@ -1,7 +1,7 @@
 typedef unsigned int u32; // now instead of typing "unsigned int", just type u32
 
 #define global_variable static
-#define internal static
+//#define internal static
 
 // color definitions
 #define red 0xC70039 

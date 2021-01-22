@@ -1,8 +1,9 @@
 #include "utils.cpp"
 #include <Windows.h>
 #include <vector>
-#include <math.h>
+
 #include <utility>
+#include <Eigen/Dense>
 
 global_variable bool running = true; 
 
