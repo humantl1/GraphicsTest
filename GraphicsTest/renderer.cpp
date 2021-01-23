@@ -73,6 +73,10 @@ static void draw_line(int x0, int y0, int x1, int y1, u32 color)
 			y0 += sy;
 		}
 	}
+	// look at the graphics book for a line algorithm (or find a simpler one) and compare them
+	// x0 = 0, x1 = 10
+	// y0 = 0, y1 = 5
+	// draw out how i think it should work, then work through it to see how it actually works
 }
 
 /// <summary>
