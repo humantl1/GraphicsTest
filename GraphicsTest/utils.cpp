@@ -22,7 +22,3 @@ inline int clamp(int min, int val, int max) // TODO: not robust enough. Still CT
 	return val;
 }
 
-inline float deg_to_rad(float degrees)
-{
-	return degrees * 3.14159 / 180;
-}

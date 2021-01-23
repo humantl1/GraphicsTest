@@ -19,6 +19,7 @@ global_variable Render_State render_state;
 
 #include "renderer.cpp" // this inclusion of another .cpp is "Unity" style compiling
 #include "graphics.cpp"
+#include "mathHelper.cpp"
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
