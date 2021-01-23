@@ -1,7 +1,4 @@
-struct Vertice
-{
-	int x, y;
-};
+
 
 /// <summary>
 /// fills window with specified color

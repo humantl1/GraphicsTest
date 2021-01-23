@@ -1,9 +1,8 @@
-#include "utils.cpp"
 #include <Windows.h>
 #include <vector>
-
 #include <utility>
 #include <Eigen/Dense>
+#include "utils.cpp"
 
 global_variable bool running = true; 
 
@@ -17,9 +16,13 @@ struct Render_State // data for current state of buffer
 
 global_variable Render_State render_state;
 
+
+#include "shapes.cpp"
+#include "mathHelper.cpp"
 #include "renderer.cpp" // this inclusion of another .cpp is "Unity" style compiling
 #include "graphics.cpp"
-#include "mathHelper.cpp"
+
+
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {

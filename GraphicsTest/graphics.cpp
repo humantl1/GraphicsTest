@@ -1,13 +1,16 @@
  
+
+
 static void draw_graphics()
 {
 	clear_screen(white);
 
-	//draw_rect(0, 0, 150, 50, black);
-	//draw_point(10, 10, black);
+	Vertice a;
 
 	draw_line(0, 0, 200, 200, black);
-	
+
+	//draw_rect(0, 0, 150, 50, black);
+	//draw_point(10, 10, black);
 	//draw_line(275, 0, 275, 500, black);
 	//draw_line(500, 400, 100.5f, 22.5f, black);
 	//draw_triangle_outline(0, 0, 200, 400, 400, 60, black);
