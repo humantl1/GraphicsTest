@@ -1,11 +1,10 @@
- 
+#include "Header.h"
 
-
-static void draw_graphics()
+void draw_graphics()
 {
 	clear_screen(white);
 
-	Vertice a;
+	//Vertice a;
 
 	draw_line(0, 0, 200, 200, black);
 

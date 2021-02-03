@@ -2,27 +2,11 @@
 #include <vector>
 #include <utility>
 #include <Eigen/Dense>
-#include "utils.cpp"
+#include "Header.h"
 
-global_variable bool running = true; 
+bool running = true; 
 
-struct Render_State // data for current state of buffer
-{
-	int height, width;
-	void* memory;
-
-	BITMAPINFO bitmap_info; // contains the data for the buffer bitmap
-};
-
-global_variable Render_State render_state;
-
-
-#include "shapes.cpp"
-#include "mathHelper.cpp"
-#include "renderer.cpp" // this inclusion of another .cpp is "Unity" style compiling
-#include "graphics.cpp"
-
-
+Render_State render_state;
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
